@@ -14,14 +14,14 @@ To access the built in H2 database go here:
 ## Unit Test Coverage
 I only provided samples of what I would normally use more extensively for the different aspects of the application. 
 - Controllers covered with SpringCloud Contract
-- Repository layer I deemed to simple to warrant tests.
+- Repository layer I deemed to simple to warrant tests, normaly would need Component tests
 - Service Layer covered with Mockito 
 
 >Lacking entirely are Integration tests.
 
 ## Design
 
-I designed the solution to solve the simple problem at hand, that is to say I didn't over think or ever-engineer it.
+I designed the solution to solve the simple problem at hand, that is to say I didn't overthink or over-engineer it.
 For brevity, I omitted security and tracing filters that would otherwise be necessary in such a microservice.
 
 There are a number of ways to address the compaction of the years matches to be published as the starting off rankings
