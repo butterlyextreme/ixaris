@@ -86,6 +86,22 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
       <artifactId>spring-boot-maven-plugin</artifactId>
     </plugin>
     <plugin>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-contract-maven-plugin</artifactId>
+      <version>2.1.1.RELEASE</version>
+      <extensions>true</extensions>
+      <configuration>
+        <basePackageForTests>
+          org.task.controller.contract
+        </basePackageForTests>
+        <baseClassForTests>
+          org.task.controller.contract.RankingControllerBase
+        </baseClassForTests>
+        <testFramework>JUNIT5</testFramework>
+        <testMode>EXPLICIT</testMode>
+      </configuration>
+    </plugin>
+    <plugin>
       <groupId>org.flywaydb</groupId>
       <artifactId>flyway-maven-plugin</artifactId>
       <version>4.0.3</version>
