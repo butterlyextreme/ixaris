@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,14 +31,33 @@ public class RankingsServiceImplTest {
     private RankingServiceImpl rankingService;
 
     @Test
-    void testReorderRankings() {
+    void testReorderRankingsWithMatches() {
 
         when(matchesRepository.findAll()).thenReturn(generateMatches());
         when(rankingsRepository.findAll()).thenReturn(generateRankings());
-
         List<PlayerRanking> playerRankings = rankingService.retrieveRankings();
 
-        System.err.println(playerRankings);
+        String result = "[PlayerRanking(id=001, score=109, ranking=1), " +
+                "PlayerRanking(id=003, score=8, ranking=2), " +
+                "PlayerRanking(id=004, score=8, ranking=2), " +
+                "PlayerRanking(id=002, score=0, ranking=3)]";
+
+        assertEquals(result, playerRankings.toString());
+
+    }
+
+    @Test
+    void testReorderRankingsWithNoMatches() {
+
+        when(rankingsRepository.findAll()).thenReturn(generateRankings());
+        List<PlayerRanking> playerRankings = rankingService.retrieveRankings();
+
+        String result = "[PlayerRanking(id=001, score=100, ranking=1), " +
+                "PlayerRanking(id=002, score=5, ranking=2), " +
+                "PlayerRanking(id=003, score=5, ranking=2), " +
+                "PlayerRanking(id=004, score=5, ranking=2)]";
+
+        assertEquals(result, playerRankings.toString());
 
     }
 
