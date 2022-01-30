@@ -25,14 +25,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Setup JDK
-      - uses: actions/setup-java@v1
-        with:
-          java-version : 1.8
-          distibution: adopt
-          cache: maven
-      - name: build with maven
-        run: mvn clean install
+ 
       
     
