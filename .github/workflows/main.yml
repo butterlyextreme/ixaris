@@ -43,6 +43,26 @@ jobs:
           dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+          
+          
+  deploy:
+    name: Deploy
+    # The type of runner that the job will run on
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2          
+          
+      - name: SetContext from Kubeconfig
+        uses: Azure/aks-set-context@v1
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+          context: docker-desktop
+        
   
 
  
