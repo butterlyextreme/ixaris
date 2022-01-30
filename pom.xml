@@ -114,6 +114,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/x
       </configuration>
     </plugin>
   </plugins>
+  <finalName>ixaris</finalName>
 </build>
 
 </project>
