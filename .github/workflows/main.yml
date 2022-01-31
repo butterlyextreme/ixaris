@@ -6,9 +6,8 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    tags: 
+      -v*
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -61,10 +60,21 @@ jobs:
         with:
           method: kubeconfig
           kubeconfig: ${{ secrets.KUBECONFIG }}
-          context: docker-desktop
+          context: iam-root-account@malta-cluster.eu-west-1.eksctl.io
+        id: setcontext
+          
+      - name: getTagName
+        uses: olegtarasov/get-tag@v2.1.1
         
-  
-
- 
+      - name: get new container image tag
+        id: image-tag
+        run: |
+         echo "::set-output name=image::butterlyextreme/iaxaris:$GIT_TAG_NAME"
       
+      - name: Deploy to Kubernetes cluster
+        uses: Azure/k8s-deploy@v1.5
+        with:
+          manifest : deployent.yaml
+          images: ${{ steps.image-tag.outputs.image }}
+  
     
