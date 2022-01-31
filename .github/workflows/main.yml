@@ -15,67 +15,24 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-      - name: Setup Java JDK
-        uses: actions/setup-java@v2.5.0
-        with:
-          # The Java version to set up. Takes a whole or semver Java version. See examples of supported syntax in README file
-          java-version: '11'
-          # Java distribution. See the list of supported distributions in README file
-          distribution: 'adopt'
-      - name: Mvn build
-        run: mvn clean install
-      
-      - uses: mr-smithers-excellent/docker-build-push@v5
-        name: Build & push Docker image
-        with:
-          image: butterlyextreme/ixaris
-          tags: latest
-          registry: docker.io
-          dockerfile: Dockerfile
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          
           
   deploy:
-    name: Deploy
-    # The type of runner that the job will run on
-    needs: [build]
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2          
-          
-      - name: SetContext from Kubeconfig
-        uses: Azure/k8s-set-context@v1
+      - uses: actions/checkout@v2
+
+      - name: kenju AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          method: kubeconfig
-          kubeconfig: ${{ secrets.KUBECONFIG }}
-          context: iam-root-account@malta-cluster.eu-west-1.eksctl.io
-        id: setcontext
-          
-      - name: getTagName
-        uses: olegtarasov/get-tag@v2.1.1
-        
-      - name: get new container image tag
-        id: image-tag
-        run: |
-         echo "::set-output name=image::butterlyextreme/iaxaris:$GIT_TAG_NAME"
-      
-      - name: Deploy to Kubernetes cluster
-        uses: Azure/k8s-deploy@v1.5
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-1
+
+      - name: Trigger deploy
+        uses: kenju/kubernetes-action@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          namespace: 'ixaris'
-          manifests : deployment.yaml
-          images: ${{ steps.image-tag.outputs.image }}
+          args: apply deployment.yaml    
   
     
