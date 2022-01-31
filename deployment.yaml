@@ -26,7 +26,7 @@ spec:
         app: ixaris-app
     spec:
       containers:
-        - name: spring-test-app 
+        - name: ixaris-app 
           image: butterlyextreme/ixaris:latest
           imagePullPolicy: IfNotPresent
           ports:
