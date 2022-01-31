@@ -74,7 +74,7 @@ jobs:
       - name: Deploy to Kubernetes cluster
         uses: Azure/k8s-deploy@v1.5
         with:
-          manifest : deployent.yaml
+          manifests : deployent.yaml
           images: ${{ steps.image-tag.outputs.image }}
   
     
