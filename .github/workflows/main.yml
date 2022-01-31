@@ -33,7 +33,7 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
         with:
-          args: apply -f deployment.yaml
+          args: --insecure-skip-tls-verify apply -f deployment.yaml
         
   
     
