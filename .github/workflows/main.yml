@@ -6,9 +6,8 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    tags: 
+      -v*
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -33,7 +32,49 @@ jobs:
           distribution: 'adopt'
       - name: Mvn build
         run: mvn clean install
-
- 
       
+      - uses: mr-smithers-excellent/docker-build-push@v5
+        name: Build & push Docker image
+        with:
+          image: butterlyextreme/ixaris
+          tags: latest
+          registry: docker.io
+          dockerfile: Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          
+          
+  deploy:
+    name: Deploy
+    # The type of runner that the job will run on
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2          
+          
+      - name: SetContext from Kubeconfig
+        uses: Azure/aks-set-context@v1
+        with:
+          method: kubeconfig
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+          context: iam-root-account@malta-cluster.eu-west-1.eksctl.io
+        id: setcontext
+          
+      - name: getTagName
+        uses: olegtarasov/get-tag@v2.1.1
+        
+      - name: get new container image tag
+        id: image-tag
+        run: |
+         echo "::set-output name=image::butterlyextreme/iaxaris:$GIT_TAG_NAME"
+      
+      - name: Deploy to Kubernetes cluster
+        uses: Azure/k8s-deploy@v1.5
+        with:
+          manifest : deployent.yaml
+          images: ${{ steps.image-tag.outputs.image }}
+  
     
