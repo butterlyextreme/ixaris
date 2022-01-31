@@ -33,7 +33,7 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG }}
         with:
-          args: apply deployment.yaml
+          args: apply -f deployment.yaml
         
   
     
