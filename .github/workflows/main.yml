@@ -28,27 +28,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      - name: Trigger deploy
+        uses: Jberlinsky/kubernetes-action@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
       - name: SetContext from Kubeconfig
         uses: Azure/k8s-set-context@v1
         with:
-          method: kubeconfig
-          kubeconfig: ${{ secrets.KUBE_CONFIG }}
-          context: iam-root-account@fabulous-creature-1643823401.eu-west-1.eksctl.io
-        id: setcontext
-
-      - name: getTagName
-        uses: olegtarasov/get-tag@v2.1.1
-
-      - name: get new container image tag
-        id: image-tag
-        run: |
-          echo "::set-output name=image::butterlyextreme/iaxaris:$GIT_TAG_NAME"
-
-      - name: Deploy to Kubernetes cluster
-        uses: Azure/k8s-deploy@v1.5
-        with:
-          manifests: deployment.yaml
-          images: ${{ steps.image-tag.outputs.image }}
+          args: --insecure-skip-tls-verify apply -f deployment.yaml
         
   
     
