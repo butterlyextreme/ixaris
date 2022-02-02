@@ -32,7 +32,7 @@ jobs:
         uses: Azure/k8s-set-context@v1
         with:
           method: kubeconfig
-          kubeconfig: ${{ secrets.KUBECONFIG }}
+          kubeconfig: ${{ secrets.KUBE_CONFIG }}
           context: iam-root-account@fabulous-creature-1643823401.eu-west-1.eksctl.io
         id: setcontext
 
