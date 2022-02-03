@@ -8,12 +8,6 @@ spec:
     spec:
       containers:
         - name: ixaris-app
-          resources:
-            requests:
-              cpu: "500m"
-              memory: "1Gi"
-            limits:
-              memory: "1Gi"
           env:
           - name: NEW_RELIC_LABELS
             value: Platform:aws;Environment:dev;Jurisdiction:com;Product:scoreboards;Component:launcher;Owner:sbit;Channel:sports
