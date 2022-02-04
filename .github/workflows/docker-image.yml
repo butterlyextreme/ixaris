@@ -53,9 +53,15 @@ jobs:
        kustomize edit set image ixaris-app=$DOCKER_USERNAME/ixaris:$GITHUB_SHA
        cat kustomization.yaml
         
-    - name: Commit files
+    - name: Deploy
+      uses: vmware-tanzu/carvel-setup-action@v1
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git commit -am "Bump docker tag"     
+        kapp
+          --color
+          --diff-changes
+          --app ixaris
+          --file <(kustomize build ".")
+          --diff-run
+
+
    
