@@ -58,6 +58,7 @@ jobs:
     - run: |
         mkdir ${HOME}/.kube
         echo ${{ secrets.KUBE_CONFIG_YAML }} | base64 --decode > ${HOME}/.kube/config
+        cd k8s/base
         kapp deploy \
           --color \
           --diff-changes \
