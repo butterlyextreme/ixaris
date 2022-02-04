@@ -52,14 +52,13 @@ jobs:
        cd k8s/base
        kustomize edit set image ixaris-app=$DOCKER_USERNAME/ixaris:$GITHUB_SHA
        cat kustomization.yaml
-       
-    - name: Trigger deploy
-      uses: Jberlinsky/kubernetes-action@master
-      env:
-         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}   
+     
 
     - uses: vmware-tanzu/carvel-setup-action@v1
     - run: |
+        mkdir ${HOME}/.kube
+        echo ${{ secrets.KUBE_CONFIG_YAML }} | base64 --decode ${HOME}/.kube/config
+        cat ${HOME}/.kube/config
         kapp deploy
           --color
           --diff-changes
