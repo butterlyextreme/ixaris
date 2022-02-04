@@ -52,10 +52,9 @@ jobs:
        cd k8s/base
        kustomize edit set image ixaris-app=$DOCKER_USERNAME/ixaris:$GITHUB_SHA
        cat kustomization.yaml
-        
-    - name: Deploy
-      uses: vmware-tanzu/carvel-setup-action@v1
-      run: |
+
+    - uses: vmware-tanzu/carvel-setup-action@v1
+    - run: |
         kapp
           --color
           --diff-changes
