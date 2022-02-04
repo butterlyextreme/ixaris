@@ -56,7 +56,7 @@ jobs:
     - uses: vmware-tanzu/carvel-setup-action@v1
     - run: |
         kapp deploy
-          -kubeconfig-context ${{ secrets.KUBE_CONFIG }}
+          --kubeconfig-context ${{ secrets.KUBE_CONFIG }}
           --color
           --diff-changes
           --app ixaris
