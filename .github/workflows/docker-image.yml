@@ -57,7 +57,7 @@ jobs:
     - uses: vmware-tanzu/carvel-setup-action@v1
     - run: |
         mkdir ${HOME}/.kube
-        echo ${{ secrets.KUBE_CONFIG_YAML }} | base64 --decode ${HOME}/.kube/config
+        echo ${{ secrets.KUBE_CONFIG_YAML }} | base64 --decode > ${HOME}/.kube/config
         cat ${HOME}/.kube/config
         kapp deploy
           --color
