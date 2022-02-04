@@ -55,7 +55,7 @@ jobs:
 
     - uses: vmware-tanzu/carvel-setup-action@v1
     - run: |
-        kapp
+        kapp deploy
           --color
           --diff-changes
           --app ixaris
