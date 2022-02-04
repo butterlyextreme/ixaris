@@ -57,14 +57,12 @@ jobs:
     - uses: vmware-tanzu/carvel-setup-action@v1
     - run: |
         mkdir ${HOME}/.kube
-        echo ${{ secrets.KUBE_CONFIG_YAML }} 
         echo ${{ secrets.KUBE_CONFIG_YAML }} | base64 --decode > ${HOME}/.kube/config
-        cat ${HOME}/.kube/config
-        kapp deploy
-          --color
-          --diff-changes
-          --app ixaris
-          --file <(kustomize build ".")
+        kapp deploy \
+          --color \
+          --diff-changes \
+          --app ixaris \
+          --file <(kustomize build ".") \
           --diff-run
 
 
